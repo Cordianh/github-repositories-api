@@ -1,4 +1,4 @@
-package piechna.konrad.githubrepositoriesapi;
+package piechna.konrad.githubrepositoriesapi.repository;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
