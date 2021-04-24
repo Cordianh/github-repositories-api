@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import piechna.konrad.githubrepositoriesapi.repository.domain.UserRepository;
+import piechna.konrad.githubrepositoriesapi.repository.support.LinkHeaderMapper;
 import piechna.konrad.githubrepositoriesapi.repository.support.UserReposMapper;
 
 import java.util.List;
@@ -29,13 +30,25 @@ public class UserReposService {
     }
 
     public ResponseEntity<List<UserRepository>> getRepos(String username) {
-        String url = githubApiUsersUri + username + "/repos";
+        String nextPageLink = githubApiUsersUri + username + "/repos";
         RestTemplate restTemplate = new RestTemplate();
 
         try {
-            ResponseEntity<String> responseEntity = restTemplate.getForEntity(url, String.class);
+            ResponseEntity<String> responseEntity = restTemplate.getForEntity(nextPageLink, String.class);
 
             List<UserRepository> userRepositories = userReposMapper.toUserRepos(responseEntity.getBody());
+
+            LinkHeaderMapper mapper = new LinkHeaderMapper();
+            Object linkHeader = responseEntity.getHeaders().get("Link");
+            nextPageLink = mapper.getNextPageLink(Objects.requireNonNull(linkHeader).toString());
+            while (nextPageLink != null) {
+                responseEntity = restTemplate.getForEntity(nextPageLink, String.class);
+                userRepositories.addAll(userReposMapper.toUserRepos(responseEntity.getBody()));
+
+                linkHeader = responseEntity.getHeaders().get("Link");
+                nextPageLink = mapper.getNextPageLink(Objects.requireNonNull(linkHeader).toString());
+            }
+
             logger.info(username + "'s repositories successfully parsed");
             return new ResponseEntity<>(userRepositories, HttpStatus.OK);
         } catch (RestClientException e) {
@@ -47,10 +60,10 @@ public class UserReposService {
         }
     }
 
-    public ResponseEntity<Integer> getStars(String username) {
+    public ResponseEntity<Long> getStars(String username) {
         ResponseEntity<List<UserRepository>> responseEntity = getRepos(username);
         if (responseEntity.hasBody()) {
-            int starsAmount = 0;
+            long starsAmount = 0;
             List<UserRepository> userRepositories = responseEntity.getBody();
             for (UserRepository repository : Objects.requireNonNull(userRepositories)) {
                 starsAmount += repository.getStars();
