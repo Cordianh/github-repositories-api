@@ -13,6 +13,7 @@ import piechna.konrad.githubrepositoriesapi.repository.domain.UserRepository;
 import piechna.konrad.githubrepositoriesapi.repository.support.UserReposMapper;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class UserReposService {
@@ -44,5 +45,18 @@ public class UserReposService {
             logger.warn(username + "'s repositories hasn't been parsed");
             return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
         }
+    }
+
+    public ResponseEntity<Integer> getStars(String username) {
+        ResponseEntity<List<UserRepository>> responseEntity = getRepos(username);
+        if (responseEntity.hasBody()) {
+            int starsAmount = 0;
+            List<UserRepository> userRepositories = responseEntity.getBody();
+            for (UserRepository repository : Objects.requireNonNull(userRepositories)) {
+                starsAmount += repository.getStars();
+            }
+            return new ResponseEntity<>(starsAmount, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(responseEntity.getStatusCode());
     }
 }

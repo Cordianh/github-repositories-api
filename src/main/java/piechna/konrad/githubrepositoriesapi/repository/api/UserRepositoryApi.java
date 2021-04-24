@@ -27,7 +27,15 @@ public class UserRepositoryApi {
         ResponseEntity<List<UserRepository>> responseEntity = userReposService.getRepos(username);
         logger.info("Sent response for api/repositories/" + username + " request, status code: " +
                 responseEntity.getStatusCode());
+        return responseEntity;
+    }
 
+    @GetMapping("/{username}/stars")
+    public ResponseEntity<Integer> getUserStars(@PathVariable("username") String username) {
+        logger.info("Got request: api/repositories/" + username + "/stars");
+        ResponseEntity<Integer> responseEntity = userReposService.getStars(username);
+        logger.info("Sent response for api/repositories/" + username + "/repos request, status code: " +
+                responseEntity.getStatusCode());
         return responseEntity;
     }
 }
