@@ -3,6 +3,7 @@
 ## Table of contents
 * [Info](#info)
 * [Setup](#setup)
+* [Future features](#future features)
 
 ## Info
 API allows you to:
@@ -46,3 +47,11 @@ By default, Tomcat starts at **localhost:8080**, so you should be able to access
 localhost:8080/GithubRepositoriesAPI/
 ```
 I hope everything went well 😊
+
+## Future features
+Things I'd like to add/fix:
+* Pagination of requested items (e.g. user repositories).
+* Endpoint which returns all available API endpoints with a brief description, updating automatically after changes in the application source code.
+* OAuth2 token for requests authentication (access to private resources).
+* Database to store all usernames with their total stars, which would be refreshed e.g. once a day.
+* Ranking of users with the most total stars, based on database data.
