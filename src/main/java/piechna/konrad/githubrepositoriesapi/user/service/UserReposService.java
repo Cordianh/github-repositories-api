@@ -1,4 +1,4 @@
-package piechna.konrad.githubrepositoriesapi.repository.service;
+package piechna.konrad.githubrepositoriesapi.user.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.slf4j.Logger;
@@ -9,9 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
-import piechna.konrad.githubrepositoriesapi.repository.domain.UserRepositories;
-import piechna.konrad.githubrepositoriesapi.repository.support.LinkHeaderMapper;
-import piechna.konrad.githubrepositoriesapi.repository.support.UserReposMapper;
+import piechna.konrad.githubrepositoriesapi.user.domain.UserRepositories;
+import piechna.konrad.githubrepositoriesapi.user.support.LinkHeaderMapper;
+import piechna.konrad.githubrepositoriesapi.user.support.UserReposMapper;
 
 @Service
 public class UserReposService {
