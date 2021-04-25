@@ -5,13 +5,22 @@ import java.util.regex.Pattern;
 
 public class LinkHeaderMapper {
 
-    public String getNextPageLink(String link) {
+    private String nextPageLink;
+
+    public boolean findNextPageLink(Object linkHeaderResources) {
+        if (linkHeaderResources == null) return false;
+
         String urlRegex = "<([^<>]*?)>; rel=\"next\"";
 
         Pattern pattern = Pattern.compile(urlRegex);
-        Matcher matcher = pattern.matcher(link);
+        Matcher matcher = pattern.matcher(linkHeaderResources.toString());
 
-        if (matcher.find()) return matcher.group(1);
-        return null;
+        boolean result;
+        if (result = matcher.find()) nextPageLink = matcher.group(1);
+        return result;
+    }
+
+    public String getNextPageLink() {
+        return nextPageLink;
     }
 }
