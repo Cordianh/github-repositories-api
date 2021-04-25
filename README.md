@@ -3,7 +3,7 @@
 ## Table of contents
 * [Info](#info)
 * [Setup](#setup)
-* [Future features](#future features)
+* [Future features](#future-features)
 
 ## Info
 API allows you to:
