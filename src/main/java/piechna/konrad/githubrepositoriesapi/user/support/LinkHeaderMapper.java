@@ -1,4 +1,4 @@
-package piechna.konrad.githubrepositoriesapi.repository.support;
+package piechna.konrad.githubrepositoriesapi.user.support;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

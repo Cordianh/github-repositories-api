@@ -1,4 +1,4 @@
-package piechna.konrad.githubrepositoriesapi.repository.domain;
+package piechna.konrad.githubrepositoriesapi.user.domain;
 
 public class UserRepository {
 

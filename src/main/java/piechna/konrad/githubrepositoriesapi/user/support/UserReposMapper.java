@@ -1,12 +1,12 @@
-package piechna.konrad.githubrepositoriesapi.repository.support;
+package piechna.konrad.githubrepositoriesapi.user.support;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import org.springframework.stereotype.Component;
-import piechna.konrad.githubrepositoriesapi.repository.domain.UserRepositories;
-import piechna.konrad.githubrepositoriesapi.repository.domain.UserRepository;
+import piechna.konrad.githubrepositoriesapi.user.domain.UserRepositories;
+import piechna.konrad.githubrepositoriesapi.user.domain.UserRepository;
 
 @Component
 public class UserReposMapper {

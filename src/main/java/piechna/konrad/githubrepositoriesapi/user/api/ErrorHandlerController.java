@@ -1,4 +1,4 @@
-package piechna.konrad.githubrepositoriesapi.repository.api;
+package piechna.konrad.githubrepositoriesapi.user.api;
 
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;
