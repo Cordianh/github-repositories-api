@@ -28,6 +28,10 @@ git clone https://github.com/Cordianh/github-repositories-api.git
 ```
 
 When the project is cloned:
+* (this step is optional but allows you to send more requests per hour) generate **Personal access token** at *https://github.com/settings/tokens* and assign it to ***github-auth.token*** in the ***application.properties*** file:
+  ```
+  github-auth.token=YOUR_GITHUB_PERSONAL_TOKEN
+  ```
 * **make sure you have added JDK and Maven to your system PATH 😉**
 * open terminal in the project path ***.../github-repositories-api*** 
 * run following command:
@@ -52,6 +56,6 @@ I hope everything went well 😊
 Things I'd like to add/fix:
 * Pagination of requested items (e.g. user repositories).
 * Endpoint which returns all available API endpoints with a brief description, updating automatically after changes in the application source code.
-* OAuth2 token for requests authentication (access to private resources).
+* Increase usability of personal access token (access to private resources).
 * Database to store all usernames with their total stars, which would be refreshed e.g. once a day.
 * Ranking of users with the most total stars, based on database data.
