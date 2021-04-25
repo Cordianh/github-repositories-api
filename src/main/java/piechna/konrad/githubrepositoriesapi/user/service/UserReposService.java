@@ -4,10 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import piechna.konrad.githubrepositoriesapi.user.domain.UserRepositories;
 import piechna.konrad.githubrepositoriesapi.user.support.LinkHeaderMapper;
@@ -19,6 +18,9 @@ public class UserReposService {
     private final static Logger logger = LoggerFactory.getLogger(UserReposService.class);
     private final UserReposMapper userReposMapper;
 
+    @Value("${github-auth.token}")
+    private String githubToken;
+
     @Value("${github-api-users.uri}")
     private String githubApiUsersUri;
 
@@ -29,9 +31,13 @@ public class UserReposService {
     public ResponseEntity<UserRepositories> getRepos(String username) {
         String nextPageLink = githubApiUsersUri + username + "/repos";
         RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        if (!githubToken.isEmpty()) headers.add("Authorization", "token " + githubToken);
+        HttpEntity<String> entity = new HttpEntity<>("", headers);
 
         try {
-            ResponseEntity<String> responseEntity = restTemplate.getForEntity(nextPageLink, String.class);
+            ResponseEntity<String> responseEntity =
+                    restTemplate.exchange(nextPageLink, HttpMethod.GET, entity, String.class);
 
             UserRepositories userRepositories = userReposMapper.toUserRepos(responseEntity.getBody());
 
@@ -40,7 +46,7 @@ public class UserReposService {
             while (mapper.findNextPageLink(linkHeader)) {
                 nextPageLink = mapper.getNextPageLink();
 
-                responseEntity = restTemplate.getForEntity(nextPageLink, String.class);
+                responseEntity = restTemplate.exchange(nextPageLink, HttpMethod.GET, entity, String.class);
                 userRepositories.addAll(userReposMapper.toUserRepos(responseEntity.getBody()));
 
                 linkHeader = responseEntity.getHeaders().get("Link");
@@ -48,9 +54,9 @@ public class UserReposService {
 
             logger.info(username + "'s repositories successfully parsed");
             return new ResponseEntity<>(userRepositories, HttpStatus.OK);
-        } catch (RestClientException e) {
-            logger.warn(username + " user cannot be found");
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (HttpClientErrorException e) {
+            logger.warn(e.getMessage());
+            return new ResponseEntity<>(e.getStatusCode());
         } catch (JsonProcessingException e) {
             logger.warn(username + "'s repositories hasn't been parsed");
             return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
