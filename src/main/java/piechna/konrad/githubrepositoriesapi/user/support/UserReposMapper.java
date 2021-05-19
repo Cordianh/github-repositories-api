@@ -5,14 +5,16 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import org.springframework.stereotype.Component;
-import piechna.konrad.githubrepositoriesapi.user.domain.UserRepositories;
 import piechna.konrad.githubrepositoriesapi.user.domain.UserRepository;
+
+import java.util.LinkedList;
+import java.util.List;
 
 @Component
 public class UserReposMapper {
 
-    public UserRepositories toUserRepos(String json) throws JsonProcessingException {
-        UserRepositories userRepositories = new UserRepositories();
+    public List<UserRepository> toUserRepos(String json) throws JsonProcessingException {
+        List<UserRepository> userRepositories = new LinkedList<>();
         ObjectMapper objectMapper = new ObjectMapper();
 
         ArrayNode arrayNode = objectMapper.readValue(json, ArrayNode.class);
